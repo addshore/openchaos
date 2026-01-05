@@ -1,10 +1,14 @@
 import { Suspense } from "react";
 import { Countdown } from "@/components/Countdown";
 import { PRList } from "@/components/PRList";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-16">
+    <main className="min-h-screen flex flex-col items-center px-4 py-16 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
         OPENCHAOS.DEV
       </h1>
@@ -14,7 +18,7 @@ export default function Home() {
       </div>
 
       <section className="mt-16 w-full flex flex-col items-center">
-        <h2 className="text-xl font-medium text-zinc-600 mb-6">
+        <h2 className="text-xl font-medium text-zinc-600 dark:text-zinc-400 mb-6">
           Open PRs — Vote to merge
         </h2>
         <Suspense
@@ -34,7 +38,7 @@ export default function Home() {
             href="https://github.com/skridlevsky/openchaos"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-zinc-900 transition-colors"
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
             View on GitHub
           </a>

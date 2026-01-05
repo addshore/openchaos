@@ -11,7 +11,7 @@ export function PRCard({ pr, rank }: PRCardProps) {
       href={pr.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block w-full p-4 rounded-lg border border-zinc-200 hover:border-zinc-400 transition-colors"
+      className="block w-full p-4 rounded-lg border border-zinc-200 hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600 transition-colors"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
