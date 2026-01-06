@@ -1,24 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("theme");
+    // Get system preference and reverse it
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setIsDark(stored === "dark" || (!stored && prefersDark));
-  }, []);
+    const reversedTheme = prefersDark ? "light" : "dark";
+    setIsDark(reversedTheme === "dark");
+    document.documentElement.setAttribute("data-theme", reversedTheme);
 
-  useEffect(() => {
-    if (mounted) {
-      document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    }
-  }, [isDark, mounted]);
+    // Listen for system preference changes
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      const reversedTheme = e.matches ? "light" : "dark";
+      setIsDark(reversedTheme === "dark");
+      document.documentElement.setAttribute("data-theme", reversedTheme);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   if (!mounted) {
     return <div className="w-8 h-8" />;
@@ -26,7 +32,7 @@ export function ThemeToggle() {
 
   return (
     <button
-      onClick={() => setIsDark(!isDark)}
+      onClick={() => alert("No.")}
       className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
