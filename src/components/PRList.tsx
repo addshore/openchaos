@@ -36,7 +36,7 @@ export async function PRList() {
   return (
     <div className="w-full max-w-xl space-y-3">
       {prs.map((pr, index) => (
-        <PRCard key={pr.number} pr={pr} rank={index + 1} />
+        <PRCard key={pr.number} pr={pr} rank={index + 1} maxVotes={prs[0]?.votes || 0} />
       ))}
     </div>
   );
