@@ -42,9 +42,21 @@ export async function getOpenPRs(): Promise<PullRequest[]> {
     }
   );
 
+  const limit = response.headers.get("x-ratelimit-limit");
+  const remaining = response.headers.get("x-ratelimit-remaining");
+  const used = response.headers.get("x-ratelimit-used");
+  const resetTime = response.headers.get("x-ratelimit-reset");
+  const resource = response.headers.get("x-ratelimit-resource");
+  if (remaining !== null) {
+    const resetDate = new Date(parseInt(resetTime || "0") * 1000).toISOString();
+    console.log(`[GitHub API Rate Limit] Limit: ${limit}, Used: ${used}, Remaining: ${remaining}, Resource: ${resource}, Reset: ${resetDate}`);
+  }
+
   if (!response.ok) {
     if (response.status === 403) {
-      throw new Error("Rate limited by GitHub API");
+      const resetTime = response.headers.get("x-ratelimit-reset");
+      const resetDate = resetTime ? new Date(parseInt(resetTime) * 1000) : new Date();
+      throw new Error(`Rate limited by GitHub API. Resets at ${resetDate.toISOString()}`);
     }
     throw new Error(`GitHub API error: ${response.status}`);
   }

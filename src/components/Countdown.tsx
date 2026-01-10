@@ -58,7 +58,7 @@ export function Countdown() {
 
   if (!mounted) {
     return (
-      <div className="text-center">
+      <div className="text-center" suppressHydrationWarning>
         <div className="text-5xl sm:text-7xl font-mono font-bold tracking-tight">
           --d --h --m --s
         </div>

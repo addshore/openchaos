@@ -1,5 +1,6 @@
 import { getOpenPRs } from "@/lib/github";
 import { PRCard } from "./PRCard";
+import { RateLimitCountdown } from "./RateLimitCountdown";
 
 export async function PRList() {
   let prs;
@@ -12,6 +13,12 @@ export async function PRList() {
   }
 
   if (error) {
+    const rateLimitMatch = error.match(/Resets at (.+)$/);
+    if (rateLimitMatch) {
+      const resetTime = new Date(rateLimitMatch[1]);
+      return <RateLimitCountdown resetTime={resetTime} />;
+    }
+
     return (
       <div className="w-full max-w-xl text-center py-8">
         <p className="text-zinc-500">{error}</p>
