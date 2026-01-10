@@ -26,20 +26,22 @@ function getTimeRemaining(target: Date): {
   hours: number;
   minutes: number;
   seconds: number;
+  milliseconds: number;
 } {
   const now = new Date();
   const diff = Math.max(0, target.getTime() - now.getTime());
 
+  const milliseconds = diff % 1000;
   const seconds = Math.floor((diff / 1000) % 60);
   const minutes = Math.floor((diff / 1000 / 60) % 60);
   const hours = Math.floor((diff / 1000 / 60 / 60) % 24);
   const days = Math.floor(diff / 1000 / 60 / 60 / 24);
 
-  return { days, hours, minutes, seconds };
+  return { days, hours, minutes, seconds, milliseconds };
 }
 
-function pad(n: number): string {
-  return n.toString().padStart(2, "0");
+function pad(n: number, count: number = 2): string {
+  return n.toString().padStart(count, "0");
 }
 
 export function Countdown() {
@@ -51,7 +53,7 @@ export function Countdown() {
     setMounted(true);
     const interval = setInterval(() => {
       setTime(getTimeRemaining(target));
-    }, 1000);
+    }, 53); // just a prime number
 
     return () => clearInterval(interval);
   }, [target]);
@@ -70,7 +72,7 @@ export function Countdown() {
   return (
     <div className="text-center">
       <div className="text-5xl sm:text-7xl font-mono font-bold tracking-tight">
-        {time.days}d {pad(time.hours)}h {pad(time.minutes)}m {pad(time.seconds)}s
+        {time.days}d {pad(time.hours)}h {pad(time.minutes)}m {pad(time.seconds)}s {pad(time.milliseconds, 4)}ms
       </div>
       <p className="mt-4 text-zinc-400 text-lg">until next merge</p>
     </div>
