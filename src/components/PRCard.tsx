@@ -3,11 +3,11 @@ import type { PullRequest } from "@/lib/github";
 interface PRCardProps {
   pr: PullRequest;
   rank: number;
-  maxVotes: number;
+  totalVotes: number;
 }
 
-export function PRCard({ pr, rank, maxVotes }: PRCardProps) {
-  const percentage = maxVotes > 0 ? (pr.votes / maxVotes) * 100 : 0;
+export function PRCard({ pr, rank, totalVotes }: PRCardProps) {
+  const percentage = totalVotes > 0 ? (pr.votes / totalVotes) * 100 : 0;
   return (
     <a
       href={pr.url}
@@ -37,11 +37,14 @@ export function PRCard({ pr, rank, maxVotes }: PRCardProps) {
         View &amp; Vote on GitHub
         <span aria-hidden="true">→</span>
       </div>
-      {maxVotes > 0 && (
+      {totalVotes > 0 && (
         <div className="mt-3 h-1.5 bg-zinc-100 rounded-full overflow-hidden">
           <div
             className="h-full bg-amber-400 rounded-full transition-all"
             style={{ width: `${percentage}%` }}
+            title={`${percentage.toFixed(0)}% of all votes on current open PRs`}
+            aria-label={`${percentage.toFixed(0)}% of all votes on current open PRs`}
+            role="img"
           />
         </div>
       )}
