@@ -290,6 +290,9 @@
   white-space: nowrap;
 }
 
+[data-theme="dark"] .ie6-addressbar-url {
+  color: #ffffff;
+}
 .ie6-addressbar-go {
   height: 20px;
   padding: 0 12px;
