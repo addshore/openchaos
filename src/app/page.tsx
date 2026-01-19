@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <IE6Layout>
       <Countdown />
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-8 right-4">
         <ThemeToggle />
       </div>
       
