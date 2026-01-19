@@ -33,7 +33,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => alert("No.")}
-      className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+      className="ie6-toolbar-button"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {isDark ? (
