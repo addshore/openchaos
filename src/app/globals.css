@@ -42,3 +42,42 @@ center {
   0% { filter: hue-rotate(0deg); }
   100% { filter: hue-rotate(360deg); }
 }
+
+.chaos-mode {
+  animation: rotate-hue 6s linear infinite;
+  --background: linear-gradient(120deg, #ffb3c6, #b3e6ff);
+}
+
+.chaos-mode body {
+  background: radial-gradient(circle at 20% 30%, #fff6c2, transparent 20%), radial-gradient(circle at 80% 70%, #e6f7ff, transparent 20%);
+}
+
+.chaos-emoji {
+  position: fixed;
+  top: 10px;
+  pointer-events: none;
+  font-size: 28px;
+  transform: translateY(0) scale(1);
+  animation: chaos-float 3s ease-in forwards;
+  z-index: 9999;
+}
+
+@keyframes chaos-float {
+  0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(420px) scale(1.6) rotate(720deg); opacity: 0; }
+}
+
+.chaos-mode .page-header-text, .chaos-mode .page-main-table {
+  animation: wobble 1s ease-in-out infinite;
+}
+
+@keyframes wobble {
+  0% { transform: rotate(-1deg) translateY(0); }
+  50% { transform: rotate(1deg) translateY(-4px); }
+  100% { transform: rotate(-1deg) translateY(0); }
+}
+
+.chaos-mode a, .chaos-mode .blink-text {
+  color: #ff0077 !important;
+  text-shadow: 0 0 8px rgba(255,0,119,0.6);
+}

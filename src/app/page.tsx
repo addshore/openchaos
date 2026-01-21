@@ -3,6 +3,7 @@ import { Countdown } from "@/components/Countdown";
 import { PRList } from "@/components/PRList";
 import { IE6Layout } from "@/components/IE6Layout";
 import { WebCounter } from "@/components/WebCounter";
+import { ChaosMode } from "@/components/ChaosMode";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
                   <b>
                     <span className="sparkle-pulse">✨</span> <span className="blink-text">OPEN PRS - VOTE TO MERGE</span> <span className="sparkle-pulse sparkle-delay-2">✨</span>
                   </b>
+                  <ChaosMode />
                 </span>
               </td>
             </tr>
