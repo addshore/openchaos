@@ -1176,6 +1176,127 @@
   font-family: 'Comic Sans MS';
 }
 
+/* ===== HALL OF CHAOS COMPONENT ===== */
+.hall-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.hall-error-table {
+  background-color: #ffcccc;
+  border-color: #ff0000;
+  max-width: 600px;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.hall-error-cell {
+  text-align: center;
+  color: #cc0000;
+}
+
+.hall-empty-table {
+  background-color: #ffffcc;
+  border-color: #ffcc00;
+  max-width: 600px;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.hall-empty-cell {
+  text-align: center;
+  color: #996600;
+}
+
+.hall-card {
+  margin-bottom: 10px;
+  font-family: 'Comic Sans MS', cursive;
+  background-color: #ccffcc;
+  border-color: #009900;
+}
+
+.hall-card-number-cell {
+  background-color: #99ff99;
+  text-align: center;
+  width: 15%;
+}
+
+.hall-card-number-text {
+  font-size: 20px;
+  color: #006600;
+  font-family: 'Comic Sans MS';
+}
+
+.hall-card-merged-badge {
+  margin-top: 5px;
+}
+
+.hall-card-merged-badge-text {
+  font-size: 12px;
+  color: #ffffff;
+  font-family: Arial;
+  background-color: #009900;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.hall-card-content-cell {
+  background-color: #e6ffe6;
+  padding: 10px;
+}
+
+.hall-card-title {
+  font-size: 16px;
+  font-family: 'Comic Sans MS';
+  color: #000000;
+}
+
+.hall-card-author-row {
+  padding-top: 5px;
+}
+
+.hall-card-author-text {
+  font-size: 14px;
+  font-family: Arial;
+  color: #666666;
+}
+
+.hall-card-author-link {
+  color: #006600;
+  text-decoration: underline;
+}
+
+.hall-card-date {
+  color: #888888;
+  font-size: 12px;
+}
+
+.hall-card-link-row {
+  padding-top: 8px;
+}
+
+.hall-card-link {
+  color: #006600;
+  text-decoration: underline;
+  font-family: Arial;
+  font-size: 12px;
+}
+
+.hall-card-trophy-cell {
+  background-color: #ffff00;
+  text-align: center;
+  width: 15%;
+}
+
+.hall-card-trophy-emoji {
+  font-size: 24px;
+  font-family: Arial;
+}
+
+.hall-card-winner-text {
+  font-size: 12px;
+  color: #cc6600;
+  font-family: 'Comic Sans MS';
+}
+
 /* ===== GUESTBOOK COMPONENT ===== */
 .guestbook-button {
   background-color: #00ffff;
