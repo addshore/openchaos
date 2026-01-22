@@ -1,3 +1,5 @@
+import { Console } from "console";
+
 export interface PullRequest {
   number: number;
   title: string;
@@ -5,6 +7,8 @@ export interface PullRequest {
   url: string;
   votes: number;
   createdAt: string;
+  isMergeable: boolean;
+  checksPassed: boolean;
 }
 
 interface GitHubPR {
@@ -15,10 +19,21 @@ interface GitHubPR {
     login: string;
   };
   created_at: string;
+  head: {
+    sha: string;
+  };
 }
 
 interface GitHubReaction {
   content: string;
+}
+
+interface GitHubPRDetail {
+  mergeable: boolean | null;
+}
+
+interface GitHubCommitStatus {
+  state: "failure" | "pending" | "success" | "error";
 }
 
 const GITHUB_REPO = "skridlevsky/openchaos";
@@ -70,10 +85,13 @@ export async function getOpenPRs(): Promise<PullRequest[]> {
 
   const prs = allPRs;
 
-  // Fetch reactions for each PR
+  // Fetch reactions and status for each PR
   const prsWithVotes = await Promise.all(
     prs.map(async (pr) => {
       const votes = await getPRVotes(owner, repo, pr.number);
+      const isMergeable = await getPRMergeStatus(owner, repo, pr.number);
+      const checksPassed = await getCommitStatus(owner, repo, pr.head.sha);
+
       return {
         number: pr.number,
         title: pr.title,
@@ -81,20 +99,17 @@ export async function getOpenPRs(): Promise<PullRequest[]> {
         url: pr.html_url,
         votes,
         createdAt: pr.created_at,
+        isMergeable,
+        checksPassed,
       };
     }),
   );
 
   // Sort by votes descending
-  return prsWithVotes.sort((a, b) => {
-    // 1. Primary Sort: Net Score
-    if (b.votes !== a.votes) {
-      return b.votes - a.votes;
-    }
-
-    // 2. Secondary Sort: Creation Date (Newest Wins)
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  return prsWithVotes.sort((a, b) =>
+    (b.votes - a.votes) ||
+    (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  );
 }
 
 async function getPRVotes(owner: string, repo: string, prNumber: number): Promise<number> {
@@ -111,6 +126,7 @@ async function getPRVotes(owner: string, repo: string, prNumber: number): Promis
     );
 
     if (!response.ok) {
+      // console.error(`Failed to fetch reactions for PR #${prNumber}: ${response.status} with message ${await response.text()}`);
       break;
     }
 
@@ -130,4 +146,46 @@ async function getPRVotes(owner: string, repo: string, prNumber: number): Promis
   }
 
   return allReactions.filter((r) => r.content === "+1").length - allReactions.filter((r) => r.content === "-1").length;
+}
+
+async function getPRMergeStatus(
+  owner: string,
+  repo: string,
+  prNumber: number
+): Promise<boolean> {
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`,
+    {
+      headers: getHeaders("application/vnd.github.v3+json"),
+      next: { revalidate: 300 },
+    }
+  );
+
+  if (!response.ok) {
+    return false;
+  }
+
+  const data: GitHubPRDetail = await response.json();
+  return data.mergeable ?? false;
+}
+
+async function getCommitStatus(
+  owner: string,
+  repo: string,
+  sha: string
+): Promise<boolean> {
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/commits/${sha}/status`,
+    {
+      headers: getHeaders("application/vnd.github.v3+json"),
+      next: { revalidate: 300 },
+    }
+  );
+
+  if (!response.ok) {
+    return false;
+  }
+
+  const data: GitHubCommitStatus = await response.json();
+  return data.state === "success";
 }
