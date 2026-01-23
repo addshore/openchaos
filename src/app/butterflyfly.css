@@ -1,0 +1,50 @@
+/* Cursor trail butterfly fly-to-edge animations */
+.cursor-trail-emoji.persistent {
+  pointer-events: none;
+  z-index: 10000;
+  will-change: transform, opacity;
+}
+
+.cursor-trail-emoji.persistent.fly-left {
+  animation: fly-left var(--fly-duration, 8s) linear forwards;
+}
+.cursor-trail-emoji.persistent.fly-right {
+  animation: fly-right var(--fly-duration, 8s) linear forwards;
+}
+.cursor-trail-emoji.persistent.fly-top {
+  animation: fly-top var(--fly-duration, 8s) linear forwards;
+}
+.cursor-trail-emoji.persistent.fly-bottom {
+  animation: fly-bottom var(--fly-duration, 8s) linear forwards;
+}
+
+/* More unpredictable flight using CSS vars for per-element targets */
+.cursor-trail-emoji.persistent.fly-random {
+  animation: fly-to var(--fly-duration, 8s) linear forwards;
+}
+
+@keyframes fly-left {
+  from { transform: translate(-50%, -50%); opacity: 1; }
+  to   { transform: translate(-300vw, -50%); opacity: 0; }
+}
+@keyframes fly-right {
+  from { transform: translate(-50%, -50%); opacity: 1; }
+  to   { transform: translate(300vw, -50%); opacity: 0; }
+}
+@keyframes fly-top {
+  from { transform: translate(-50%, -50%); opacity: 1; }
+  to   { transform: translate(-50%, -300vh); opacity: 0; }
+}
+@keyframes fly-bottom {
+  from { transform: translate(-50%, -50%); opacity: 1; }
+  to   { transform: translate(-50%, 300vh); opacity: 0; }
+}
+
+/* Generic fly-to animation that uses CSS vars --tx and --ty (px values)
+   End transform uses calc(-50% + var(--tx)) so px offsets are applied relative
+   to the element's centered starting position. */
+@keyframes fly-to {
+  from { transform: translate(-50%, -50%); opacity: 1; }
+  to   { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))); opacity: 0; }
+}
+
