@@ -3,6 +3,7 @@ import { Countdown } from "@/components/Countdown";
 import { PRList } from "@/components/PRList";
 
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ChaosButton } from "@/components/ChaosButton";
 import { IE6Layout } from "@/components/IE6Layout";
 import { WebCounter } from "@/components/WebCounter";
 import { HallOfChaos } from "@/components/HallOfChaos";
@@ -12,7 +13,10 @@ export default function Home() {
     <IE6Layout>
       <Countdown />
       <div className="absolute top-8 right-4">
-        <ThemeToggle />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <ThemeToggle />
+          <ChaosButton />
+        </div>
       </div>
       <div className="page-container">
         <table width="100%" border={2} cellPadding={15} cellSpacing={0} className="page-main-table">
