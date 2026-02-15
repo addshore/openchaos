@@ -4,7 +4,6 @@ import { Clippy } from "@/components/Clippy";
 import { CursorTrail } from "@/components/CursorTrail";
 import { Fartscroll } from "@/components/Fartscroll";
 import "./globals.css";
-import "./retro.css";
 import "./butterflyfly.css";
 
 const chaoticEmojis = [

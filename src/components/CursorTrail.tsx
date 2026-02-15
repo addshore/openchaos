@@ -12,9 +12,13 @@ interface CursorPoint {
   ty?: number; // target y offset (px)
 }
 
+const ASCII_BUTTERFLIES = ["<><", "/\\/", "\\/\\", "<*>"];
+const DEFAULT_BUTTERFLY = ASCII_BUTTERFLIES[0];
+const KONAMI_BULLET = "[BANG]";
+
 export function CursorTrail() {
   const [cursors, setCursors] = useState<CursorPoint[]>([]);
-  const [emoji, setEmoji] = useState("🦋");
+  const [emoji, setEmoji] = useState(DEFAULT_BUTTERFLY);
   const butterflyCount = useRef(0);
   const FLY_DURATION = 8000; // ms (4x slower - quarter speed)
 
@@ -22,6 +26,7 @@ export function CursorTrail() {
   const cursorIdRef = useRef(0);
   // track last mouse pos for debug spawning
   const lastMouse = useRef({ x: 0, y: 0 });
+  const konamiResetTimer = useRef<NodeJS.Timeout | null>(null);
 
   const spawnPersistent = (x: number, y: number) => {
     const windowW = window.innerWidth;
@@ -60,7 +65,7 @@ export function CursorTrail() {
     // cursor id is persisted across handlers
 
     const handleMouseMove = (e: MouseEvent) => {
-      const isButterfly = emoji === "🦋";
+      const isButterfly = ASCII_BUTTERFLIES.includes(emoji);
 
       // update last known mouse position
       lastMouse.current = { x: e.clientX, y: e.clientY };
@@ -115,7 +120,11 @@ export function CursorTrail() {
       if (key === code[pos] || e.key === code[pos]) {
         pos++;
         if (pos === code.length) {
-          setEmoji("🔫");
+          setEmoji(KONAMI_BULLET);
+          if (konamiResetTimer.current) clearTimeout(konamiResetTimer.current);
+          konamiResetTimer.current = setTimeout(() => {
+            setEmoji(DEFAULT_BUTTERFLY);
+          }, 1500);
           pos = 0;
         }
       } else {
@@ -137,6 +146,7 @@ export function CursorTrail() {
     return () => {
       window.removeEventListener("keydown", handleKey);
       window.removeEventListener('keydown', debugSpawn);
+      if (konamiResetTimer.current) clearTimeout(konamiResetTimer.current);
     };
   }, []);
 
@@ -144,14 +154,16 @@ export function CursorTrail() {
     <div style={{ pointerEvents: "none", position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 9999 }}>
 
       {cursors.map((cursor) => {
-        const style: React.CSSProperties = {
-          position: "absolute",
-          left: cursor.x,
-          top: cursor.y,
-          transform: "translate(-50%, -50%)",
-          fontSize: "24px",
-          userSelect: "none"
-        };
+          const style: React.CSSProperties = {
+            position: "absolute",
+            left: cursor.x,
+            top: cursor.y,
+            transform: "translate(-50%, -50%)",
+            fontSize: "20px",
+            fontFamily: "'Courier New', 'Lucida Console', monospace",
+            whiteSpace: "nowrap",
+            userSelect: "none"
+          };
         if (cursor.persistent) {
           (style as any)["--fly-duration"] = `${FLY_DURATION}ms`;
           (style as any)["--tx"] = `${cursor.tx ?? 0}px`;
